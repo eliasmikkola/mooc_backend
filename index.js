@@ -56,17 +56,23 @@ app.post('/api/persons/', (req, res) => {
         if(!newContact[n]) return n
     })
 
+
     if(errors.length > 0) {
         return res.status(400).json({error: `fields missing: ${errors.join(' ,')}`})
     }
     //check name uniqueness
-    if(persons.find(n => n.name === newContact["name"])){
-        return res.status(409).json({ error: 'name must be unique' })   
-    }
-
-    newContact["id"] = parseInt(Math.random() * 99999999)
-    persons.push(newContact)
-    res.status(201).json(newContact)
+    // if(persons.find(n => n.name === newContact["name"])){
+    //     return res.status(409).json({ error: 'name must be unique' })   
+    // }
+    
+    const contact = new Contact(newContact)
+    contact
+    .save()
+        .then(response => {
+            console.log("mongo response", response)
+            res.status(201).json(Contact.format(response))
+            
+        })    
 })
 
 

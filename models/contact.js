@@ -3,7 +3,6 @@ const config = require('../config.js')
 const url = `mongodb://${config.mongo.user}:${config.mongo.password}@${config.mongo.ds}.mlab.com:${config.mongo.port}/${config.mongo.project}`
 
 const formatContact = (contact) => {
-    console.log("FORMATTING")
   const formattedContact = { ...contact._doc, id: contact._id }
   delete formattedContact._id
   delete formattedContact.__v
