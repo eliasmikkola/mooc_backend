@@ -46,13 +46,19 @@ app.delete('/api/persons/:id', (req, res) => {
 
 
 app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const findPerson = persons.find(n => n.id === id)
+    const id = req.params.id
+    
+    Contact
+        .findById(id)
+        .then(contact => {
+            res.status(200).json(Contact.format(contact))
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(404)
+        })
 
-    if (findPerson) res.json(findPerson)
-    else {
-        res.status(404).end()
-    }
+    
 })
 
 
