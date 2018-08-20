@@ -67,7 +67,7 @@ app.post('/api/persons/', (req, res) => {
 
 
     if(errors.length > 0) {
-        return res.status(400).json({error: `fields missing: ${errors.join(' ,')}`})
+        return res.status(400).json({error: `fields missing: ${errors.join(', ')}`})
     }
     //check name uniqueness
     // if(persons.find(n => n.name === newContact["name"])){
@@ -105,7 +105,11 @@ app.put('/api/persons/:id', (req, res) => {
 
 
 app.get('/info', (req, res) => {
-    res.send(`<p>puhelinluettelossa ${persons.length} henkilön tiedot</p><p>${new Date()}</p>`)
+    Contact
+        .find({})
+        .then(contacts => {
+            res.send(`<p>puhelinluettelossa ${contacts.length} henkilön tiedot</p><p>${new Date()}</p>`)
+        })
 })
 
 
