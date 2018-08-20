@@ -89,7 +89,7 @@ app.get('/info', (req, res) => {
 
 
 
-var PORT = process.env.PORT || 8000
+var PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
