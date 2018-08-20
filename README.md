@@ -6,7 +6,7 @@ create file config.js to use mongo.js
 module.exports = {
     mongo: {
         user: '<username>',
-        password: '<password>'
+        password: '<password>',
         project: '<projectname>',
         ds: 'ds<something>',
         port: '<port>'
