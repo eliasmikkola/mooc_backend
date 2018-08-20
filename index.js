@@ -63,6 +63,8 @@ app.get('/api/persons/:id', (req, res) => {
 
 
 app.post('/api/persons/', (req, res) => {
+    console.log("NAMEE", req.body.name)
+    
     const newContact = req.body
     //fields to check for error
     const fieldsToCheck = ["name", "number"]
@@ -75,22 +77,30 @@ app.post('/api/persons/', (req, res) => {
     if(errors.length > 0) {
         return res.status(400).json({error: `fields missing: ${errors.join(', ')}`})
     }
-    //check name uniqueness
-    // if(persons.find(n => n.name === newContact["name"])){
-    //     return res.status(409).json({ error: 'name must be unique' })   
-    // }
     
-    const contact = new Contact(newContact)
-    contact
-    .save()
-        .then(response => {
-            console.log("mongo response", response)
-            res.status(201).json(Contact.format(response))
+    Contact
+        .findOne({name: req.body.name})
+        .then(result => {
+            if(result === null){
+                const contact = new Contact(newContact)
+                contact
+                .save()
+                    .then(response => {
+                        console.log("mongo response", response)
+                        res.status(201).json(Contact.format(response))
+                        
+                    }).catch(error => {
+                        console.log(error)
+                        // ...
+                    })
+            }
+            else {
+                return res.status(409).json({ error: 'name must be unique' })
+            }
             
-        }).catch(error => {
-            console.log(error)
-            // ...
         })
+
+    
 })
 
 app.put('/api/persons/:id', (req, res) => {
