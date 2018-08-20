@@ -3,8 +3,10 @@ const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 
-app.use(morgan('tiny')
-)
+
+morgan.token('parsebody', (req, res) => { return JSON.stringify(req.body) })
+
+app.use(morgan(':method :url :parsebody :status :res[content-length] - :response-time ms'))
 
 app.use(bodyParser.json())
 
@@ -72,7 +74,7 @@ app.post('/api/persons/', (req, res) => {
 
     newContact["id"] = parseInt(Math.random() * 99999999)
     persons.push(newContact)
-    res.json(newContact)
+    res.status(201).json(newContact)
 })
 
 
