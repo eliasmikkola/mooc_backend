@@ -87,6 +87,21 @@ app.post('/api/persons/', (req, res) => {
         })
 })
 
+app.put('/api/persons/:id', (req, res) => {
+    const id = req.params.id
+    const newContact = req.body
+    
+    Contact
+        .findByIdAndUpdate(id, newContact, {new: true})
+        .then(updatedContact => {
+            res.status(202).json(Contact.format(updatedContact))
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(400).send({ error: 'malformatted id' })
+        })
+
+})
 
 
 app.get('/info', (req, res) => {
