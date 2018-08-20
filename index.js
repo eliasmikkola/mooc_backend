@@ -50,6 +50,21 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons/', (req, res) => {
     const newContact = req.body
+    //fields to check for error
+    const fieldsToCheck = ["name", "number"]
+    //iterate fields to check
+    const errors = fieldsToCheck.filter(n => {
+        if(!newContact[n]) return n
+    })
+
+    if(errors.length > 0) {
+        return res.status(400).json({error: `fields missing: ${errors.join(' ,')}`})
+    }
+    //check name uniqueness
+    if(persons.find(n => n.name === newContact["name"])){
+        return res.status(409).json({ error: 'name must be unique' })   
+    }
+
     newContact["id"] = parseInt(Math.random() * 99999999)
     persons.push(newContact)
     res.json(newContact)
