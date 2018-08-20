@@ -4,6 +4,10 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 
+const config = require('./config.js')
+
+const Contact = require('./models/contact')
+
 app.use(express.static('build'))
 
 app.use(cors())
@@ -14,39 +18,30 @@ app.use(morgan(':method :url :parsebody :status :res[content-length] - :response
 app.use(bodyParser.json())
 
 
-
-let persons = [
-    {
-        name: 'Arto Hellas',
-        number: '050 123 123',
-        id: 1
-    },
-    {
-        name: 'Jaska Jokunen',
-        number: '050 123 124',
-        id: 2
-    },
-    {
-        name: 'Teuvo Hakkarainen',
-        number: '050 000 000',
-        id: 3
-    },
-    {
-        name: 'Sale Päle',
-        number: '050 123 69',
-        id: 4
-    }
-]
+const formatContact = (contact) => {
+  const formattedContact = { ...contact._doc, id: contact._id }
+  delete formattedContact._id
+  delete formattedContact.__v
+  return formattedContact
+}
 
 app.get('/api/persons', (req, res) => {
-    res.json(persons)
+    Contact
+    .find({})
+    .then(contacts => {
+        res.json(contacts.map(formatContact))
+    })
 })
+
+
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     persons = persons.filter(n => n.id !== id)
 
     res.status(204).end()
 })
+
+
 
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
@@ -57,6 +52,7 @@ app.get('/api/persons/:id', (req, res) => {
         res.status(404).end()
     }
 })
+
 
 app.post('/api/persons/', (req, res) => {
     const newContact = req.body
