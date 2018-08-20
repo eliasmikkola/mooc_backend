@@ -4,8 +4,6 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 
-const config = require('./config.js')
-
 const Contact = require('./models/contact')
 
 app.use(express.static('build'))
@@ -18,18 +16,13 @@ app.use(morgan(':method :url :parsebody :status :res[content-length] - :response
 app.use(bodyParser.json())
 
 
-const formatContact = (contact) => {
-  const formattedContact = { ...contact._doc, id: contact._id }
-  delete formattedContact._id
-  delete formattedContact.__v
-  return formattedContact
-}
+
 
 app.get('/api/persons', (req, res) => {
     Contact
     .find({})
     .then(contacts => {
-        res.json(contacts.map(formatContact))
+        res.json(contacts.map(Contact.format))
     })
 })
 
