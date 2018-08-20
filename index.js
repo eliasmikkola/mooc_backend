@@ -27,7 +27,14 @@ let persons = [
 app.get('/api/persons', (req, res) => {
   res.json(persons)
 })
-app.get('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    persons = persons.filter(n => n.id !== id)
+
+    res.status(204).end()
+})
+
+  app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     const findPerson = persons.find(n => n.id === id)
     
