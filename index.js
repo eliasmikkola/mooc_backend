@@ -23,15 +23,24 @@ app.get('/api/persons', (req, res) => {
     .find({})
     .then(contacts => {
         res.json(contacts.map(Contact.format))
+    }).catch(error => {
+        console.log(error)
+        // ...
     })
 })
 
 
 app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    persons = persons.filter(n => n.id !== id)
-
-    res.status(204).end()
+    const id = req.params.id
+    
+    Contact
+        .findByIdAndRemove(id)
+        .then(result => {
+            res.status(204).end()
+        }).catch(error => {
+            console.log(error)
+            response.status(400).send({ error: 'malformatted id' })
+        })
 })
 
 
@@ -72,7 +81,10 @@ app.post('/api/persons/', (req, res) => {
             console.log("mongo response", response)
             res.status(201).json(Contact.format(response))
             
-        })    
+        }).catch(error => {
+            console.log(error)
+            // ...
+        })
 })
 
 
