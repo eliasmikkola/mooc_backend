@@ -1,9 +1,7 @@
 const mongoose = require('mongoose')
-const config = require('./config.js')
-
 mongoose.Promise = require('bluebird');
 
-const url = `mongodb://${config.mongo.user}:${config.mongo.password}@${config.mongo.ds}.mlab.com:${config.mongo.port}/${config.mongo.project}`
+const url = process.env.MONGO_URL
 
 mongoose.connect(url, {
     useNewUrlParser: true

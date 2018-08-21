@@ -14,7 +14,7 @@ morgan.token('parsebody', (req, res) => { return JSON.stringify(req.body) })
 app.use(morgan(':method :url :parsebody :status :res[content-length] - :response-time ms'))
 
 app.use(bodyParser.json())
-
+require('dotenv').config();
 
 
 

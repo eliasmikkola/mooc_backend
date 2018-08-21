@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
-const config = require('../config.js')
-const url = `mongodb://${config.mongo.user}:${config.mongo.password}@${config.mongo.ds}.mlab.com:${config.mongo.port}/${config.mongo.project}`
+require('dotenv').config();
+const url = process.env.MONGO_URL
+
 
 const formatContact = (contact) => {
   const formattedContact = { ...contact._doc, id: contact._id }
